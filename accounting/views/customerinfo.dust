@@ -1,0 +1,83 @@
+<HTML>
+	<HEAD>
+		<TITLE> User information</TITLE>
+	</HEAD>
+	
+	<BODY>
+		<H1>Balaji Agencies</H1>
+		<form id='customerInfo' action='' method='post'>
+			{?customerInfo}
+				<fieldset id="orgInfo" name="orgInfo">
+					<h3>Organization details</h3>
+					Name: &nbsp;&nbsp;<input type="text" id="orgName" name="orgName" value="{orgDetails.name}"></br></br>
+					Addr1: &nbsp;&nbsp;<input type="text" id="addr1" name="addr1" value="{orgDetails.addr1}"></br></br>
+					Addr2: &nbsp;&nbsp;<input type="text" id="addr2" name="addr2" value="{orgDetails.addr2}"></br></br>
+					Town: &nbsp;&nbsp;<input type="text" id="town" name="town" value="{orgDetails.town}"></br></br>
+					Area: &nbsp;&nbsp;&nbsp;&nbsp;<select id="area" name="area">
+						<option value="select"> Select </option>
+						<option value="area1"> Area1 </option>
+						<option value="area2"> Area2 </option>
+						<option value="area3"> Area3 </option>
+					</select>
+					</br></br>
+					Phone: &nbsp;&nbsp;<input type="text" id="orgPhone" name="orgPhone" value="{orgDetails.phone}"></br>
+				</fieldset>
+				</br>
+				
+				<fieldset id="primeInfo" name="primeInfo">
+					<h3>Primary contact</h3>
+					Name: &nbsp;&nbsp;<input type="text" id="name" name="primeName" value="{primeDetails.name}"></br></br>
+					Phone: &nbsp;&nbsp;<input type="text" id="primePhone" name="primePhone" value="{primeDetails.phone}"></br>
+				</fieldset>
+				</br></br>
+				
+				<button onClick="validateAndSubmit()">submit</button>
+				&nbsp;&nbsp;&nbsp;
+				<input type="reset" value="Reset">
+			{/customerInfo}
+		<form>		
+	</BODY>
+	<script>
+		function validateAndSubmit(){
+			alert("in validateAndSubmit");
+			var valid = false;
+			var invalidFileds = [];
+			
+			//Validate org name
+			//Alpha numeric, spaces, .,-,_,',\,(comma)
+			//Length 1 to 256
+			orgNameFiled = document.getElementById('orgName');
+			orgNameValue = orgNameFiled.value;
+			alert(orgNameValue);
+			
+			//Validate org address line 1
+			//Length 1 to 256
+			
+			//No validation for org address line 2
+			
+			//Validate org Town
+			//Alphabetic .,-,_
+			//Length 1 to 256
+			
+			//Validate org area
+			//Not 'select' (i.e some option is chosen)
+			
+			//Validate org phone
+			//Numeric, +, -
+			//Both + and - will be removed
+			//Length compulsory 10 numbers
+			
+			//validate prime name
+			//Alpha numeric, spaces, .,-,_,',\,(comma)
+			//Length 1 to 256
+			
+			//validate prime phone
+			//Numeric, +, -
+			//Both + and - will be removed
+			//Length compulsory 10 numbers
+			
+			if(valid)
+				document.getElementById('customerInfo').submit();
+		}
+	</script>
+</HTML>
