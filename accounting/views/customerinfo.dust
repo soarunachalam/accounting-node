@@ -7,8 +7,8 @@
 		<H1>Balaji Agencies</H1>
 		<form id='customerInfo' action='' method='post'>
 			{?customerInfo}
-				<div class=ex style="width:550px;height:380px;position:relative;">
-					<div style="position:absolute; left:0px; width:250px; height:350px;">
+				<div class=ex style="width:750px;height:300px;position:relative;">
+					<div style="position:absolute; left:0px; width:350px; height:350px;">
 						<fieldset id="orgInfo" name="orgInfo">
 							<h3>Organization details</h3>
 							Name: &nbsp;&nbsp;<input type="text" id="orgName" name="orgName" value="{orgDetails.name}"></br></br>
@@ -26,18 +26,18 @@
 						</fieldset>
 						</br>
 					</div>
-					<div style="position:absolute; left:280px; width:250px; height:350px;">
+					<div style="position:absolute; left:380px; width:350px; height:350px;">
 						<fieldset id="primeInfo" name="primeInfo">
 							<h3>Primary contact</h3>
 							Name: &nbsp;&nbsp;<input type="text" id="name" name="primeName" value="{primeDetails.name}"></br></br>
 							Phone: &nbsp;&nbsp;<input type="text" id="primePhone" name="primePhone" value="{primeDetails.phone}"></br>
-							</br></br></br></br></br></br></br></br></br></br></br>
+							</br></br></br></br></br></br></br></br>
 						</fieldset>
 						
 					</div>
 				</div>
 				</br>
-				<div style="position:relative; width:500px; left:150px">
+				<div style="position:relative; width:700px; left:300px">
 					<button onClick="validateAndSubmit()">submit</button>
 					&nbsp;&nbsp;&nbsp;
 					<input type="reset" value="Reset">
