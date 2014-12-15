@@ -6,7 +6,7 @@
 	<BODY>
 		<H1>Balaji Agencies</H1>
 		<form id='customerInfo' action='' method='post'>
-			{?customerInfo}
+			{#customerInfo}
 				<fieldset id="orgInfo" name="orgInfo">
 					<h3>Organization details</h3>
 					Name: &nbsp;&nbsp;<input type="text" id="orgName" name="orgName" value="{orgDetails.name}"></br></br>
