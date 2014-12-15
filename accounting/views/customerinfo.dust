@@ -6,7 +6,7 @@
 	<BODY>
 		<H1>Balaji Agencies</H1>
 		<form id='customerInfo' action='' method='post'>
-			{?customerInfo}
+			{#customerInfo}
 				<div class=ex style="width:550px;height:380px;position:relative;">
 					<div style="position:absolute; left:0px; width:250px; height:350px;">
 						<fieldset id="orgInfo" name="orgInfo">
