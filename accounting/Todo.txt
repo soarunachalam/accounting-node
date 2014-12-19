@@ -10,4 +10,6 @@ Userinfo page
 	While using 'customerinfo' in HTML, use it only if it is set by server
 	Area field
 		send options from server (using dust)
-		In case of sending userinfo from server (like searching user), set the Area filed also		
+		In case of sending userinfo from server (like searching user), set the Area filed also
+	Addr[12] field validation
+		Can contain any char including '/\'; need a better regex.

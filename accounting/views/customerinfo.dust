@@ -2,11 +2,11 @@
 	<HEAD>
 		<TITLE> User information</TITLE>
 	</HEAD>
-	
+
 	<BODY>
 		<H1>Balaji Agencies</H1>
-		<form id='customerInfo' action='' method='post'>
-			{?customerInfo}
+		<form id='customerInfo' action='customer-information' onsubmit="return validateAndSubmit()" method='post'>
+			{#customerInfo}
 				<div class=ex style="width:750px;height:300px;position:relative;">
 					<div style="position:absolute; left:0px; width:350px; height:350px;">
 						<fieldset id="orgInfo" name="orgInfo">
@@ -29,63 +29,130 @@
 					<div style="position:absolute; left:380px; width:350px; height:350px;">
 						<fieldset id="primeInfo" name="primeInfo">
 							<h3>Primary contact</h3>
-							Name: &nbsp;&nbsp;<input type="text" id="name" name="primeName" value="{primeDetails.name}"></br></br>
+							Name: &nbsp;&nbsp;<input type="text" id="primeName" name="primeName" value="{primeDetails.name}"></br></br>
 							Phone: &nbsp;&nbsp;<input type="text" id="primePhone" name="primePhone" value="{primeDetails.phone}"></br>
 							</br></br></br></br></br></br></br></br>
 						</fieldset>
-						
 					</div>
 				</div>
 				</br>
 				<div style="position:relative; width:700px; left:300px">
-					<button onClick="validateAndSubmit()">submit</button>
+					<input type="submit" value="submit"></input>
 					&nbsp;&nbsp;&nbsp;
-					<input type="reset" value="Reset">
-				</div>				
+					<input type="reset" value="Reset"></input>
+				</div>
 			{/customerInfo}
-		<form>		
+		</form>
 	</BODY>
+
 	<script>
 		function validateAndSubmit(){
-			alert("in validateAndSubmit");
 			var valid = false;
 			var invalidFileds = [];
+			var messages = [];
+
+			/*Validate org name
+			  Alpha numeric, spaces, .,-,_,',\,(comma)
+			  Length 2 to 128
+			*/
+			var regName = /^[^\s\\`~!@#$%^&*\(\)_'=+\{\}"\/?.,<>\|][^\\~!@#$%^&*\(\)=+\{\}"\/?<>\|]{2,128}$/;
+			var regAddr = /^[^\s\\`~!$%^&'=+"\/?.,<>\|][^\\\/]{1,128}$/;
+			var regPhone = /^[+\d][\d-]{5,15}$/;
 			
-			//Validate org name
-			//Alpha numeric, spaces, .,-,_,',\,(comma)
-			//Length 1 to 256
-			orgNameFiled = document.getElementById('orgName');
-			orgNameValue = orgNameFiled.value;
-			alert(orgNameValue);
+			var orgNameFiled = document.getElementById('orgName');
+			var orgNameValue = orgNameFiled.value;
 			
-			//Validate org address line 1
-			//Length 1 to 256
+			if (!regName.test(orgNameValue)){
+				invalidFileds[invalidFileds.length] = orgNameFiled;
+				messages[messages.length] = "Enter valid name for organisation";
+			}
+
+			/*Validate org address line 1
+			  Length 1 to 256
+			*/
+			var addr1Field = document.getElementById('addr1');
+			var addr1Value = addr1Field.value;
+
+			if (!regAddr.test(addr1Value)){
+				invalidFileds[invalidFileds.length] = addr1Field;
+				messages[messages.length] = "Enter valid address1";
+			}
+
+			/*validate org address line 2, if it is not null.
+			  Same validations as addr1
+			 */
+			var addr2Field = document.getElementById('addr2');
+			var addr2Value = addr2Field.value;
+			if (addr2Value.length != 0 && !regAddr.test(addr2Value)){
+				invalidFileds[invalidFileds.length] = addr2Field;
+				messages[messages.length] = "Enter valid address2";
+			}
+
+
+			/*Validate org Town
+			  Same validations as addr1
+			 */
+			var townField = document.getElementById('town');
+			var townValue = townField.value;
+
+			if (!regAddr.test(townValue)){
+				invalidFileds[invalidFileds.length] = townField;
+				messages[messages.length] = "Enter valid town";
+			}
+
+			/*Validate org area
+			  Not 'select' (i.e some option is chosen)
+			 */
+			var areaField = document.getElementById('area');
+			var areaValue = areaField.value;
+
+			if (areaValue == 'select'){
+				invalidFileds[invalidFileds.length] = areaField;
+				messages[messages.length] = "Choose any one area";
+			}
+
+			/*Validate org phone
+			  Numeric, +, -
+			  Both + and - will be removed
+			  Length compulsory 10 numbers
+			 */
+			var orgPhoneField = document.getElementById('orgPhone');
+			var orgPhoneValue = orgPhoneField.value;
+
+			if (!regPhone.test(orgPhoneValue)){
+				invalidFileds[invalidFileds.length] = orgPhoneField;
+				messages[messages.length] = "Enter valid phone number for organisation";
+			}
 			
-			//No validation for org address line 2
+			/*Validate prime name
+			  same validation as org name
+			 */
+			var primeNameFiled = document.getElementById('primeName');
+			var primeNameValue = primeNameFiled.value;
+			if (!regName.test(primeNameValue)){
+				invalidFileds[invalidFileds.length] = primeNameFiled;
+				messages[messages.length] = "Enter valid name for primery contact";
+			}
 			
-			//Validate org Town
-			//Alphabetic .,-,_
-			//Length 1 to 256
+			/*Validate primery contact phone
+			  Same validations as org phone
+			 */
+			var primePhoneField = document.getElementById('primePhone');
+			var primePhoneValue = primePhoneField.value;
+
+			var regPhone = /^[+\d][\d-]{5,15}$/;
+			if (!regPhone.test(primePhoneValue)){
+				invalidFileds[invalidFileds.length] = primePhoneField;
+				messages[messages.length] = "Enter valid phone number for primery contact";				
+			}
 			
-			//Validate org area
-			//Not 'select' (i.e some option is chosen)
-			
-			//Validate org phone
-			//Numeric, +, -
-			//Both + and - will be removed
-			//Length compulsory 10 numbers
-			
-			//validate prime name
-			//Alpha numeric, spaces, .,-,_,',\,(comma)
-			//Length 1 to 256
-			
-			//validate prime phone
-			//Numeric, +, -
-			//Both + and - will be removed
-			//Length compulsory 10 numbers
-			
-			if(valid)
-				document.getElementById('customerInfo').submit();
+			if(0 === invalidFileds.length){
+				return true;
+			}	
+			else{
+				alert("There is some error in the page");
+				return false;
+			}
 		}
 	</script>
 </HTML>
