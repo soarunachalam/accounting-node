@@ -29,8 +29,8 @@
 					<div style="position:absolute; left:380px; width:350px; height:350px;">
 						<fieldset id="primeInfo" name="primeInfo">
 							<h3>Primary contact</h3>
-							Name: &nbsp;&nbsp;<input type="text" id="primeName" name="primeName" value="{primeDetails.name}"></br></br>
-							Phone: &nbsp;&nbsp;<input type="text" id="primePhone" name="primePhone" value="{primeDetails.phone}"></br>
+							Name: &nbsp;&nbsp;<input type="text" id="primeryContactName" name="primeryContactName" value="{primeryContactDetails.name}"></br></br>
+							Phone: &nbsp;&nbsp;<input type="text" id="primeryContactPhone" name="primeryContactPhone" value="{primeryContactDetails.phone}"></br>
 							</br></br></br></br></br></br></br></br>
 						</fieldset>
 					</div>
@@ -127,7 +127,7 @@
 			/*Validate prime name
 			  same validation as org name
 			 */
-			var primeNameFiled = document.getElementById('primeName');
+			var primeNameFiled = document.getElementById('primeryContactName');
 			var primeNameValue = primeNameFiled.value;
 			if (!regName.test(primeNameValue)){
 				invalidFileds[invalidFileds.length] = primeNameFiled;
@@ -137,7 +137,7 @@
 			/*Validate primery contact phone
 			  Same validations as org phone
 			 */
-			var primePhoneField = document.getElementById('primePhone');
+			var primePhoneField = document.getElementById('primeryContactPhone');
 			var primePhoneValue = primePhoneField.value;
 
 			var regPhone = /^[+\d][\d-]{5,15}$/;
@@ -150,7 +150,8 @@
 				return true;
 			}	
 			else{
-				alert("There is some error in the page");
+				for(i=0; i< messages.length; i++)
+					alert(messages[i]);
 				return false;
 			}
 		}

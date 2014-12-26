@@ -4,7 +4,7 @@ Create a config file
 	Load data like port (9000) from that file
 
 Userinfo page
-	Make the fieldsets vertical align
+	On tab validate
 	Use CSS instead of '&nbsp;'
 	Use CSS to highlight error fields
 	While using 'customerinfo' in HTML, use it only if it is set by server
