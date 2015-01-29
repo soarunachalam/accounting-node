@@ -22,6 +22,7 @@ app.post('/customer-information', urlencodedParser, function (req, res) {
 	var orgDetailsRecvd = {};
 	var primeryContactDetailsRecvd = {};
 	var customerInfo = {};
+	var customers = [];
 	
 	orgDetailsRecvd["name"] = req.body.orgName;
 	orgDetailsRecvd["addr1"] = req.body.addr1;

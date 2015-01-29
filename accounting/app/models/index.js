@@ -3,7 +3,7 @@ var orm      = require('orm');
 var connection = null;
 
 function setup(db, cb) {
-  //require('./message')(orm, db);
+  require('./custInfo')(orm, db);
 
   return cb(null, db);
 }
@@ -16,6 +16,7 @@ module.exports = function (cb) {
 
     connection = db;
     db.settings.set('instance.returnAllErrors', true);
+	console.log("connecting to DB");
     setup(db, cb);
   });
 };

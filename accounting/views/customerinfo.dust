@@ -5,32 +5,43 @@
 
 	<BODY>
 		<H1>Balaji Agencies</H1>
+		<script src="customerinfo_validate.js"> </script>
+		
+		<div class=ex1 style="width:350px;height:15px;">
+			{#customerInfo}				
+				{@eq key=state value=Added}
+				   Customer information added
+				{/eq}	
+			{/customerInfo}	
+		</div>
+		</br>
+		
 		<form id='customerInfo' action='customer-information' onsubmit="return validateAndSubmit()" method='post'>
 			{#customerInfo}
 				<div class=ex style="width:750px;height:300px;position:relative;">
 					<div style="position:absolute; left:0px; width:350px; height:350px;">
 						<fieldset id="orgInfo" name="orgInfo">
 							<h3>Organization details</h3>
-							Name: &nbsp;&nbsp;<input type="text" id="orgName" name="orgName" value="{orgDetails.name}"></br></br>
-							Addr1: &nbsp;&nbsp;<input type="text" id="addr1" name="addr1" value="{orgDetails.addr1}"></br></br>
-							Addr2: &nbsp;&nbsp;<input type="text" id="addr2" name="addr2" value="{orgDetails.addr2}"></br></br>
-							Town: &nbsp;&nbsp;<input type="text" id="town" name="town" value="{orgDetails.town}"></br></br>
-							Area: &nbsp;&nbsp;&nbsp;&nbsp;<select id="area" name="area">
+							Name: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" id="orgName" name="orgName" value="{name}"></br></br>
+							Address Line1: &nbsp;&nbsp;<input type="text" id="addr1" name="addr1" value="{addr1}"></br></br>
+							Address Line2: &nbsp;&nbsp;<input type="text" id="addr2" name="addr2" value="{addr2}"></br></br>
+							Town: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" id="town" name="town" value="{town}"></br></br>
+							Area: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<select id="area" name="area">
 								<option value="select"> Select </option>
 								<option value="area1"> Area1 </option>
 								<option value="area2"> Area2 </option>
 								<option value="area3"> Area3 </option>
 							</select>
 							</br></br>
-							Phone: &nbsp;&nbsp;<input type="text" id="orgPhone" name="orgPhone" value="{orgDetails.phone}"></br>
+							Phone: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" id="orgPhone" name="orgPhone" value="{phone}"></br>
 						</fieldset>
 						</br>
 					</div>
 					<div style="position:absolute; left:380px; width:350px; height:350px;">
 						<fieldset id="primeInfo" name="primeInfo">
 							<h3>Primary contact</h3>
-							Name: &nbsp;&nbsp;<input type="text" id="primeryContactName" name="primeryContactName" value="{primeDetails.name}"></br></br>
-							Phone: &nbsp;&nbsp;<input type="text" id="primeryContactPhone" name="primeryContactPhone" value="{primeDetails.phone}"></br>
+							Name: &nbsp;&nbsp;<input type="text" id="primeryContactName" name="primeryContactName" value="{prime_name}"></br></br>
+							Phone: &nbsp;&nbsp;<input type="text" id="primeryContactPhone" name="primeryContactPhone" value="{prime_phone}"></br>
 							</br></br></br></br></br></br></br></br>
 						</fieldset>
 					</div>
@@ -44,116 +55,4 @@
 			{/customerInfo}
 		</form>
 	</BODY>
-
-	<script>
-		function validateAndSubmit(){
-			var valid = false;
-			var invalidFileds = [];
-			var messages = [];
-
-			/*Validate org name
-			  Alpha numeric, spaces, .,-,_,',\,(comma)
-			  Length 2 to 128
-			*/
-			var regName = /^[^\s\\`~!@#$%^&*\(\)_'=+\{\}"\/?.,<>\|][^\\~!@#$%^&*\(\)=+\{\}"\/?<>\|]{2,128}$/;
-			var regAddr = /^[^\s\\`~!$%^&'=+"\/?.,<>\|][^\\\/]{1,128}$/;
-			var regPhone = /^[+\d][\d-]{5,15}$/;
-			
-			var orgNameFiled = document.getElementById('orgName');
-			var orgNameValue = orgNameFiled.value;
-			
-			if (!regName.test(orgNameValue)){
-				invalidFileds[invalidFileds.length] = orgNameFiled;
-				messages[messages.length] = "Enter valid name for organisation";
-			}
-
-			/*Validate org address line 1
-			  Length 1 to 256
-			*/
-			var addr1Field = document.getElementById('addr1');
-			var addr1Value = addr1Field.value;
-
-			if (!regAddr.test(addr1Value)){
-				invalidFileds[invalidFileds.length] = addr1Field;
-				messages[messages.length] = "Enter valid address1";
-			}
-
-			/*validate org address line 2, if it is not null.
-			  Same validations as addr1
-			 */
-			var addr2Field = document.getElementById('addr2');
-			var addr2Value = addr2Field.value;
-			if (addr2Value.length != 0 && !regAddr.test(addr2Value)){
-				invalidFileds[invalidFileds.length] = addr2Field;
-				messages[messages.length] = "Enter valid address2";
-			}
-
-
-			/*Validate org Town
-			  Same validations as addr1
-			 */
-			var townField = document.getElementById('town');
-			var townValue = townField.value;
-
-			if (!regAddr.test(townValue)){
-				invalidFileds[invalidFileds.length] = townField;
-				messages[messages.length] = "Enter valid town";
-			}
-
-			/*Validate org area
-			  Not 'select' (i.e some option is chosen)
-			 */
-			var areaField = document.getElementById('area');
-			var areaValue = areaField.value;
-
-			if (areaValue == 'select'){
-				invalidFileds[invalidFileds.length] = areaField;
-				messages[messages.length] = "Choose any one area";
-			}
-
-			/*Validate org phone
-			  Numeric, +, -
-			  Both + and - will be removed
-			  Length compulsory 10 numbers
-			 */
-			var orgPhoneField = document.getElementById('orgPhone');
-			var orgPhoneValue = orgPhoneField.value;
-
-			if (!regPhone.test(orgPhoneValue)){
-				invalidFileds[invalidFileds.length] = orgPhoneField;
-				messages[messages.length] = "Enter valid phone number for organisation";
-			}
-			
-			/*Validate prime name
-			  same validation as org name
-			 */
-			var primeNameFiled = document.getElementById('primeryContactName');
-			var primeNameValue = primeNameFiled.value;
-			if (!regName.test(primeNameValue)){
-				invalidFileds[invalidFileds.length] = primeNameFiled;
-				messages[messages.length] = "Enter valid name for primery contact";
-			}
-			
-			/*Validate primery contact phone
-			  Same validations as org phone
-			 */
-			var primePhoneField = document.getElementById('primeryContactPhone');
-			var primePhoneValue = primePhoneField.value;
-
-			var regPhone = /^[+\d][\d-]{5,15}$/;
-			if (!regPhone.test(primePhoneValue)){
-				invalidFileds[invalidFileds.length] = primePhoneField;
-				messages[messages.length] = "Enter valid phone number for primery contact";				
-			}
-			
-			if(0 === invalidFileds.length){
-				return true;
-			}	
-			else{
-				for(i=0; i< messages.length; i++)
-					alert(messages[i]);
-				return false;
-			}
-		}
-	</script>
 </HTML>

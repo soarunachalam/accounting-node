@@ -9,6 +9,7 @@ var models = require('../app/models/');
 module.exports = function (app) {
 	app.use(logger('dev'));
 	app.use(express.static(path.join(__dirname, '..\\public')));
+	app.use(express.static(path.join(__dirname, '..\\public\\javascripts')));
 
 	app.set('views', path.join(__dirname, '..\\views'));
 	app.engine('dust', cons.dust);
@@ -22,7 +23,8 @@ module.exports = function (app) {
       models(function (err, db) {
         if (err) return next(err);
 
-        req.models = db.models;
+        console.log("Setting up the req models");
+		req.models = db.models;
         req.db     = db;
 
         return next();
