@@ -1,4 +1,7 @@
-function validateAndSubmit(){
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.0/jquery.min.js"></script>
+
+$(function() {
+	$(".submit").click(function(){
 	var valid = false;
 	var invalidFileds = [];
 	var messages = [];
@@ -111,4 +114,6 @@ function validateAndSubmit(){
 			alert(messages[i]);
 		return false;
 	}
-}
+	
+	});
+});

@@ -15,15 +15,6 @@ module.exports = {
 			});
 		})*/
 		
-		/*var user = {				
-					  "name": "Somu",
-					  "addr1": "9 Harrington Road",
-					  "addr2": "Ram Nagar",
-					  "town": "Sivagangai",
-					  "phone":"04575234093",
-					  "primeName": "Somu",
-					  "primePhone":"8939901380"					
-				};*/
 		var user = {};
 		res.render("customerinfo", {"customerInfo":user});
 	},
