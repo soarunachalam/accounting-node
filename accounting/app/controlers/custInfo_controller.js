@@ -21,7 +21,8 @@ module.exports = {
 	
 	createCustomer : function (req, res) {
 		if (!req.body) return res.sendStatus(400)
-		//console.log(req.body);
+		console.log("in createCustomer function")
+		console.log(req.body);
 		
 		var customerInfo = {};
 				
@@ -35,18 +36,30 @@ module.exports = {
 		customerInfo["prime_name"] = req.body.primeryContactName;
 		customerInfo["prime_phone"] = req.body.primeryContactPhone;
 		
-		
+		//Check if there are existing customers with same name
+		var existingCustomers = [];
+		req.models.customerinfo.find({ name: customerInfo["name"] }, function (err, existingCustomers) {
+			// SQL: "SELECT * FROM person WHERE name = 'given name'"
+
+			console.log("Existing customer with name %s found: %d", customerInfo["name"], existingCustomers.length);
+			customerInfo["state"] = "Existing";
+			res.setStatus(200);
+			res.send(customerInfo);
+			return;
+		});
+
 		req.models.customerinfo.create(customerInfo, function(err, results) {
 			if(err){
 				console.log("Error in creating the entry" + err);
 				res.sendStatus(404);
+				return;
 			}
 			else{
 				console.log("Updated customer to DB");
 				customerInfo["state"] = "Added";
-				console.log(customerInfo);
-			
-				res.render("customerinfo", {"customerInfo":customerInfo});
+				//console.log(customerInfo);		
+				res.sendStatus(200);
+				return;
 			}
 		});
 		

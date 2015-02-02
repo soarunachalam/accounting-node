@@ -1,11 +1,26 @@
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.0/jquery.min.js"></script>
+function validateAndSubmit(){
+	if(validate()){
+		submit();
+	}		
+}
 
-$(function() {
-	$(".submit").click(function(){
+function submit(){
+	$.ajax({
+		type: "POST",
+		url: "customer-information",
+		data: userData,
+		success: function(customerInfo){
+			alert(customerInfo);
+			//alert("Submit returned success");
+		}
+	});
+}
+
+function validate(){	
 	var valid = false;
 	var invalidFileds = [];
 	var messages = [];
-
+	userData = {};
 	/*Validate org name
 	  Alpha numeric, spaces, .,-,_,',\,(comma)
 	  Length 2 to 128
@@ -30,6 +45,8 @@ $(function() {
 	if (!regName.test(orgNameValue)){
 		invalidFileds[invalidFileds.length] = orgNameFiled;
 		messages[messages.length] = "Enter valid name for organisation";
+	}else{
+		userData["orgName"] = orgNameValue;
 	}
 
 	/*Validate org address line 1*/
@@ -40,6 +57,8 @@ $(function() {
 	if (!regAddr.test(addr1Value)){
 		invalidFileds[invalidFileds.length] = addr1Field;
 		messages[messages.length] = "Enter valid address1";
+	}else{
+		userData["addr1"] = addr1Value;
 	}
 
 	/*validate org address line 2, if it is not null.
@@ -50,6 +69,8 @@ $(function() {
 	if (addr2Value.length != 0 && !regAddr.test(addr2Value)){
 		invalidFileds[invalidFileds.length] = addr2Field;
 		messages[messages.length] = "Enter valid address2";
+	}else{
+		userData["addr2"] = addr2Value;
 	}
 
 
@@ -62,6 +83,8 @@ $(function() {
 	if (!regAddr.test(townValue)){
 		invalidFileds[invalidFileds.length] = townField;
 		messages[messages.length] = "Enter valid town";
+	}else{
+		userData["town"] = townValue;
 	}
 
 	/*Validate org area
@@ -73,6 +96,8 @@ $(function() {
 	if (areaValue == 'select'){
 		invalidFileds[invalidFileds.length] = areaField;
 		messages[messages.length] = "Choose any one area";
+	}else{
+		userData["area"] = areaValue;
 	}
 
 	/*Validate org phone*/
@@ -82,6 +107,8 @@ $(function() {
 	if (!regPhone.test(orgPhoneValue)){
 		invalidFileds[invalidFileds.length] = orgPhoneField;
 		messages[messages.length] = "Enter valid phone number for organisation";
+	}else{
+		userData["orgPhone"] = orgPhoneValue;
 	}
 	
 	/*Validate prime name
@@ -92,6 +119,8 @@ $(function() {
 	if (!regName.test(primeNameValue)){
 		invalidFileds[invalidFileds.length] = primeNameFiled;
 		messages[messages.length] = "Enter valid name for primery contact";
+	}else{
+		userData["primeryContactName"] = primeNameValue;
 	}
 	
 	/*Validate primery contact phone
@@ -104,6 +133,8 @@ $(function() {
 	if (!regPhone.test(primePhoneValue)){
 		invalidFileds[invalidFileds.length] = primePhoneField;
 		messages[messages.length] = "Enter valid phone number for primery contact";				
+	}else{
+		userData["primeryContactPhone"] = primePhoneValue;
 	}
 	
 	if(0 === invalidFileds.length){
@@ -114,6 +145,4 @@ $(function() {
 			alert(messages[i]);
 		return false;
 	}
-	
-	});
-});
+}
