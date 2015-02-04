@@ -10,7 +10,7 @@ function submit(){
 		url: "customer-information",
 		data: userData,
 		success: function(customerInfo){
-			alert(customerInfo);
+			alert(customerInfo["name"]);
 			//alert("Submit returned success");
 		}
 	});
