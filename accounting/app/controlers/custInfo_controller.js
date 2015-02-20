@@ -26,46 +26,60 @@ module.exports = {
 		console.log(req.body);
 
 		var customerInfo = {};
-
-		customerInfo["name"] = req.body.orgName;
+		customerInfo["orgName"] = req.body.orgName;
 		customerInfo["addr1"] = req.body.addr1;
 		customerInfo["addr2"] = req.body.addr2;
 		customerInfo["town"] = req.body.town;
 		customerInfo["area"] = req.body.area;
-		customerInfo["phone"] = req.body.orgPhone;
+		customerInfo["orgPhone"] = req.body.orgPhone;
 
-		customerInfo["prime_name"] = req.body.primeryContactName;
-		customerInfo["prime_phone"] = req.body.primeryContactPhone;
+		customerInfo["primeContactName"] = req.body.primeContactName;
+		customerInfo["primeContactPhone"] = req.body.primeContactPhone;
+		customerInfo["state"] = req.body.state;
 
-		//Check if there are existing customers with same name
-		var existingCustomers = [];
-		var err;
-		req.models.customerinfo.find({ name: customerInfo["name"] }, function (err, existingCustomers) {
-			// SQL: "SELECT * FROM person WHERE name = 'given name'"
-			if(err){
-				console.log("Error while querying existing customers");
-				res.sendStatus(404);
-			}
-			if(existingCustomers.length > 0) {
-				console.log("Existing customer with name %s found: %d", customerInfo["name"], existingCustomers.length);
-				customerInfo["state"] = "Existing";
-				console.log(customerInfo);
-				return res.status(200).send(customerInfo);
-			}
-			else {
-				req.models.customerinfo.create(customerInfo, function(err, results) {
-					if(err){
-						console.log("Error in creating the entry" + err);
-						return res.sendStatus(404);
-					}
-					else{
-						console.log("Updated customer to DB");
-						customerInfo["state"] = "Added";
-						console.log(customerInfo);
-						return res.status(200).send(customerInfo);
-					}
-				});
-			}
-		});
+		if ("Force Add" === customerInfo["state"]){
+			createDBEntry (req, res, customerInfo);
+		}
+		else{
+			//Check if there are existing customers with same name
+			var existingCustomers = [];
+			var err;
+			req.models.customerinfo.find({ orgName: customerInfo["orgName"] }, function (err, existingCustomers) {
+				// SQL: "SELECT * FROM customerinfo WHERE name = 'given name'"
+				if(err){
+					console.log("Error while querying existing customers");
+					res.sendStatus(404);
+				}
+				if(existingCustomers.length > 0) {
+					var serverReturnData = {};
+					console.log("Existing customer with organisation name %s found: %d", customerInfo["orgName"], existingCustomers.length);
+					customerInfo["state"] = "Not Added";
+					existingCustomers.push(customerInfo);
+					serverReturnData["state"] = "existing user";
+					serverReturnData["customerInfo"] = existingCustomers;
+					return res.status(200).send(serverReturnData);
+				}
+				else {
+					createDBEntry (req, res, customerInfo);
+				}
+			});
+		}
 	}
 };
+
+function createDBEntry (req, res, customerInfo){
+	var serverReturnData = {};
+	req.models.customerinfo.create(customerInfo, function(err, results) {
+		if(err){
+			console.log("Error in creating the entry" + err);
+			return res.sendStatus(404);
+		}
+		else{
+			console.log("Updated customer to DB");
+			console.log(customerInfo);
+			serverReturnData["state"] = "user added";
+			serverReturnData["customerInfo"] = customerInfo;
+			return res.status(200).send(serverReturnData);
+		}
+	});
+}

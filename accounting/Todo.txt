@@ -7,9 +7,12 @@ Userinfo page
 	On tab validate
 	Use CSS instead of '&nbsp;'
 	Use CSS to highlight error fields
-	While using 'customerinfo' in HTML, use it only if it is set by server
 	Area field
 		send options from server (using dust)
 		In case of sending userinfo from server (like searching user), set the Area filed also
 	Addr[12] field validation
 		Can contain any char including '/\'; need a better regex.
+	When user sucesfully added
+		After dispalying the success message (alert), disable all the fileds in the form
+	When there are existing users
+		The table (of existing users, in the dialog bix) is generated in crude way, try to use handsontable for this

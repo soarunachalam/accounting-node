@@ -5,26 +5,19 @@
 
 	<BODY>
 		<H1>Balaji Agencies</H1>
-		
-		<script src="jquery-1.11.2.min.js"></script>
+
+		<link href="http://code.jquery.com/ui/1.11.3/themes/smoothness/jquery-ui.css" rel="stylesheet">
+		<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+		<script src="http://code.jquery.com/ui/1.11.3/jquery-ui.js"></script>
 		<script src="customerinfo_validate.js"> </script>
-		
-		<div class=ex1 style="width:350px;height:15px;">
-			{#customerInfo}				
-				{@eq key=state value=Added}
-				   Customer information added
-				{/eq}	
-			{/customerInfo}	
-		</div>
-		</br>
-		
+
 		<form id='customerInfo' method="post" onsubmit="return false">
 			{#customerInfo}
 				<div class=ex style="width:750px;height:300px;position:relative;">
 					<div style="position:absolute; left:0px; width:350px; height:350px;">
 						<fieldset id="orgInfo" name="orgInfo">
 							<h3>Organization details</h3>
-							Name: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" id="orgName" name="orgName" value="{name}"></br></br>
+							Name: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" id="orgName" name="orgName" value="{orgName}"></br></br>
 							Address Line1: &nbsp;&nbsp;<input type="text" id="addr1" name="addr1" value="{addr1}"></br></br>
 							Address Line2: &nbsp;&nbsp;<input type="text" id="addr2" name="addr2" value="{addr2}"></br></br>
 							Town: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" id="town" name="town" value="{town}"></br></br>
@@ -35,15 +28,15 @@
 								<option value="area3"> Area3 </option>
 							</select>
 							</br></br>
-							Phone: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" id="orgPhone" name="orgPhone" value="{phone}"></br>
+							Phone: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" id="orgPhone" name="orgPhone" value="{orgPhone}"></br>
 						</fieldset>
 						</br>
 					</div>
 					<div style="position:absolute; left:380px; width:350px; height:350px;">
 						<fieldset id="primeInfo" name="primeInfo">
 							<h3>Primary contact</h3>
-							Name: &nbsp;&nbsp;<input type="text" id="primeryContactName" name="primeryContactName" value="{prime_name}"></br></br>
-							Phone: &nbsp;&nbsp;<input type="text" id="primeryContactPhone" name="primeryContactPhone" value="{prime_phone}"></br>
+							Name: &nbsp;&nbsp;<input type="text" id="primeContactName" name="primeContactName" value="{primeContactName}"></br></br>
+							Phone: &nbsp;&nbsp;<input type="text" id="primeContactPhone" name="primeContactPhone" value="{primeContactPhone}"></br>
 							</br></br></br></br></br></br></br></br>
 						</fieldset>
 					</div>
@@ -52,7 +45,7 @@
 				<div style="position:relative; width:700px; left:300px">
 					<button onclick="validateAndSubmit()">submit</button>
 					&nbsp;&nbsp;&nbsp;
-					<input type="reset" value="Reset"></input>					
+					<input type="reset" value="Reset"></input>
 				</div>
 			{/customerInfo}
 		</form>
