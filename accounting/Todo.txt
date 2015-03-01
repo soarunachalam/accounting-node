@@ -2,17 +2,16 @@ Todo
 
 Create a config file
 	Load data like port (9000) from that file
-
+	Table and column names should be loaded from config file
 Userinfo page
 	On tab validate
 	Use CSS instead of '&nbsp;'
 	Use CSS to highlight error fields
 	Area field
-		send options from server (using dust)
-		In case of sending userinfo from server (like searching user), set the Area filed also
+		send options from server (using dust)		
+	Town filed
+		Use auto complete data from server.
 	Addr[12] field validation
 		Can contain any char including '/\'; need a better regex.
-	When user sucesfully added
-		After dispalying the success message (alert), disable all the fileds in the form
 	When there are existing users
-		The table (of existing users, in the dialog bix) is generated in crude way, try to use handsontable for this
+		The table (of existing users, in the dialog bix) is generated in crude way, try to use handsontable for this.

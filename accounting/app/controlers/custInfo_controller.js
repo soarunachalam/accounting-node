@@ -2,19 +2,6 @@
 module.exports = {
 	getPage	: function getPage(req, res){
 		console.log("In custInfo getpage");
-
-		/*req.models.person.find({ surname: "Snow" }, function (err, people) {
-			// SQL: "SELECT * FROM person WHERE surname = 'Snow'"
-
-			console.log("People found: %d", people.length);
-			console.log("First person: %s, age %d", people[0].fullName(), people[0].age);
-
-			people[0].age = 106;
-			people[0].save(function (err) {
-				// err.msg = "under-age";
-			});
-		})*/
-
 		var user = {};
 		res.render("customerinfo", {"customerInfo":user});
 	},
@@ -42,21 +29,21 @@ module.exports = {
 		}
 		else{
 			//Check if there are existing customers with same name
-			var existingCustomers = [];
+			var results = [];
 			var err;
-			req.models.customerinfo.find({ orgName: customerInfo["orgName"] }, function (err, existingCustomers) {
+			req.models.customerinfo.find({ orgName: customerInfo["orgName"] }, function (err, results) {
 				// SQL: "SELECT * FROM customerinfo WHERE name = 'given name'"
 				if(err){
 					console.log("Error while querying existing customers");
 					res.sendStatus(404);
 				}
-				if(existingCustomers.length > 0) {
+				if(results.length > 0) {
 					var serverReturnData = {};
-					console.log("Existing customer with organisation name %s found: %d", customerInfo["orgName"], existingCustomers.length);
+					console.log("Existing customer with organisation name %s found: %d", customerInfo["orgName"], results.length);
 					customerInfo["state"] = "Not Added";
-					existingCustomers.push(customerInfo);
+					results.push(customerInfo);
 					serverReturnData["state"] = "existing user";
-					serverReturnData["customerInfo"] = existingCustomers;
+					serverReturnData["customerInfo"] = results;
 					return res.status(200).send(serverReturnData);
 				}
 				else {
@@ -64,11 +51,23 @@ module.exports = {
 				}
 			});
 		}
+	},
+
+	getCustomerList : function (req, res, next) {
+		console.log("In get customer list");
+
+		var serverData = {};		
+		getTowns(req, res, serverData);
+	},
+
+	updateCustomerList : function (req, res, next) {
+		console.log("In get customer list");
 	}
 };
 
 function createDBEntry (req, res, customerInfo){
 	var serverReturnData = {};
+	var err, results;
 	req.models.customerinfo.create(customerInfo, function(err, results) {
 		if(err){
 			console.log("Error in creating the entry" + err);
@@ -76,10 +75,91 @@ function createDBEntry (req, res, customerInfo){
 		}
 		else{
 			console.log("Updated customer to DB");
-			console.log(customerInfo);
 			serverReturnData["state"] = "user added";
 			serverReturnData["customerInfo"] = customerInfo;
+			console.log("Sending to client\n" + serverReturnData);
 			return res.status(200).send(serverReturnData);
 		}
 	});
+}
+
+function getTowns (req, res, serverData){
+	console.log("in getTowns");
+	var err, results;
+	
+	req.db.driver.execQuery("select DISTINCT town from customerInfo order by town", function (err, results) {
+		if(err){
+			console.log("Error while querying towns");
+			serverData["towns"] = {"town":'select'};			
+		}
+		else{
+			results.unshift({"town":'select'});
+			serverData["towns"] = results;
+		}
+		console.log(serverData["towns"]);
+		getAreas(req, res, serverData);
+	});
+}
+
+function getAreas (req, res, serverData){
+	console.log("in getAreas");
+	var err, results;
+	
+	req.db.driver.execQuery("select DISTINCT area from customerInfo order by area", function (err, results) {
+		if(err){
+			console.log("Error while querying areas");
+			serverData["areas"] = {"area":'select'};
+		}
+		else{
+			results.unshift({"area":'select'});
+			serverData["areas"] = results;
+		}		
+		console.log(serverData["areas"]);
+		getOrgNames(req, res, serverData);
+	});
+}
+
+function getOrgNames (req, res, serverData){
+	console.log("in getOrgNames");
+	var err, results;
+	
+	req.db.driver.execQuery("select DISTINCT orgName from customerInfo order by orgName", function (err, results) {
+		if(err){
+			console.log("Error while querying areas");
+			serverData["orgNames"] = {"orgName":'select'};
+		}
+		else{
+			serverData["orgNames"] = results;
+		}		
+		console.log(serverData["orgNames"]);
+		getCustomerList (req, res, serverData);
+	});	
+}
+
+function getCustomerList (req, res, serverData){
+	console.log("in getCustomerList");
+	var err, results;
+	
+	req.models.customerinfo.all(function (err, results) {
+		if(err){
+			console.log("Error while querying all customers data");
+		}
+		else{
+			var customerListDup = [];
+			for (i=0; i<results.length; i++){
+				var dummyObj = {};
+				dummyObj["customer"] = results[0];
+				customerListDup.push(dummyObj);
+			}
+			serverData["customerList"] = customerListDup;
+			console.log(JSON.stringify(customerListDup));
+		}
+		renderPage(req, res, serverData);
+	});
+}
+
+function renderPage (req, res, serverData){
+	console.log("in renderPage");
+	//console.log(serverData);
+	res.render("customerlist", serverData);
 }

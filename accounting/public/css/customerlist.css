@@ -1,0 +1,16 @@
+body {
+	margin: 20px;
+}
+
+#queryFields {
+	border: 2px solid #a1a1a1;
+	padding: 20px 40px; 
+	width: 1100px;
+}
+#bill {
+	border: 2px solid #a1a1a1;
+	padding: 10px 20px; 
+	height: 300px;
+	width: 1100px;
+	overflow: scroll;
+}

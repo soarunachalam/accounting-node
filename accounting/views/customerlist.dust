@@ -1,0 +1,92 @@
+<HTML>
+	<HEAD>
+		<TITLE> Customers list</TITLE>
+	</HEAD>
+
+	<BODY>
+
+		<H1>Balaji Agencies</H1>
+
+		<link href="http://code.jquery.com/ui/1.11.3/themes/smoothness/jquery-ui.css" rel="stylesheet">
+		<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+		<script src="http://code.jquery.com/ui/1.11.3/jquery-ui.js"></script>		
+		<script src="handsontable.com/dist/handsontable.full.js"></script>
+		<link rel="stylesheet" media="screen" href="handsontable.com/dist/handsontable.full.css">
+		<link rel="stylesheet" media="screen" href="handsontable.com/demo/css/samples.css">
+		
+
+		<link href="customerlist.css" rel="stylesheet">
+		<script src="customerlist-helper.js"></script>
+		
+		<div class="ui-widget" id="queryFields" name="queryFields">
+			<label for="areaSel"> Town: </label> <select id="townSel" name="townSel">
+				{#towns}
+					<option>{town}</option>{~n}
+				{/towns}
+			</select>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<label for="areaSel"> Area: </label> <select id="areaSel" name="areaSel">
+				{#areas}
+					<option>{area}</option>{~n}
+				{/areas}
+			</select>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<label for="orgNameSel">Organisation Name: </label>
+			<input id="orgNameSel"> </input>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<button onclick="filter()">Apply Filter</button>
+		</div>
+		</br></br>
+		<div class="handsontable" id="bill"></div>
+
+		<script>
+			$(document).ready(function () {
+				bindOrgNameAutoComplete();
+				bindCustomerList();
+			});
+
+			function bindOrgNameAutoComplete(){
+				var availableOrgNames = [];
+				
+				{#orgNames}					
+					availableOrgNames.push("{orgName}");					
+				{/orgNames};
+				
+				$( "#orgNameSel" ).autocomplete({
+				  source: availableOrgNames,
+					minLength: 0,
+					scroll: true
+				}).focus(function() {
+					$(this).autocomplete("search", "")
+					});
+			}
+			
+			function bindCustomerList(){
+				var availableCustomers = [];
+				{#customerList}
+					console.log("{#.}{orgName}{/.}");
+					var dummyObj = {};
+					dummyObj['orgName'] = "{#.}{orgName}{/.}";
+					dummyObj['addr1'] = "{#.}{addr1}{/.}";
+					dummyObj['addr2'] = "{#.}{addr2}{/.}";
+					dummyObj['town'] = "{#.}{town}{/.}";
+					dummyObj['area'] = "{#.}{area}{/.}";
+					dummyObj['orgPhone'] = "{#.}{orgPhone}{/.}";
+					dummyObj['primeContactName'] = "{#.}{primeContactName}{/.}";
+					dummyObj['primeContactPhone'] = "{#.}{primeContactPhone}{/.}";
+					availableCustomers.push(dummyObj);
+				{/customerList}
+				
+				console.log(JSON.stringify(availableCustomers));
+				
+				$("#bill").handsontable({
+					data : availableCustomers,
+					startCols: 8,
+					colHeaders: ['Organisation Name', 'Address1', 'Address2', 'Town', 'Area', 'Phone', 'Primary contact', 'Primary phone'],
+					minSpareRows: 1
+				});
+			}
+		</script>
+	</BODY>
+	
+</HTML>

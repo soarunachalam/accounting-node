@@ -10,6 +10,7 @@ module.exports = function (app) {
 	app.use(logger('dev'));
 	app.use(express.static(path.join(__dirname, '..\\public')));
 	app.use(express.static(path.join(__dirname, '..\\public\\javascripts')));
+	app.use(express.static(path.join(__dirname, '..\\public\\css')));
 
 	app.set('views', path.join(__dirname, '..\\views'));
 	app.engine('dust', cons.dust);

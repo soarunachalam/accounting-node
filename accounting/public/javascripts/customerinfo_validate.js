@@ -1,4 +1,5 @@
 function validateAndSubmit(){
+	disableForm();
 	var customerInfo={};
 	if(validate(customerInfo)){
 		submit(customerInfo);
@@ -9,7 +10,7 @@ function validate(customerInfo){
 	var valid = false;
 	var invalidFileds = [];
 	var messages = [];
-	//customerInfo = {};
+
 	/*Validate org name
 	  Alpha numeric, spaces, .,-,_,',\,(comma)
 	  Length 2 to 128
@@ -28,23 +29,19 @@ function validate(customerInfo){
 	 */
 	var regPhone = /^[+\d][\d-]{5,15}$/;
 
-	var orgNameFiled = document.getElementById('orgName');
-	var orgNameValue = orgNameFiled.value;
-
+	var orgNameValue = $('#orgName').val();
 	if (!regName.test(orgNameValue)){
-		invalidFileds[invalidFileds.length] = orgNameFiled;
+		invalidFileds[invalidFileds.length] = $('#orgName');
 		messages[messages.length] = "Enter valid name for organisation";
 	}else{
 		customerInfo["orgName"] = orgNameValue;
 	}
 
 	/*Validate org address line 1*/
-
-	var addr1Field = document.getElementById('addr1');
-	var addr1Value = addr1Field.value;
-
+	
+	var addr1Value = $('#addr1').val();
 	if (!regAddr.test(addr1Value)){
-		invalidFileds[invalidFileds.length] = addr1Field;
+		invalidFileds[invalidFileds.length] = $('#addr1');
 		messages[messages.length] = "Enter valid address1";
 	}else{
 		customerInfo["addr1"] = addr1Value;
@@ -53,10 +50,9 @@ function validate(customerInfo){
 	/*validate org address line 2, if it is not null.
 	  Same validations as addr1
 	 */
-	var addr2Field = document.getElementById('addr2');
-	var addr2Value = addr2Field.value;
+	var addr2Value = $('#addr2').val();
 	if (addr2Value.length != 0 && !regAddr.test(addr2Value)){
-		invalidFileds[invalidFileds.length] = addr2Field;
+		invalidFileds[invalidFileds.length] = $('#addr2');
 		messages[messages.length] = "Enter valid address2";
 	}else{
 		customerInfo["addr2"] = addr2Value;
@@ -66,11 +62,9 @@ function validate(customerInfo){
 	/*Validate org Town
 	  Same validations as addr1
 	 */
-	var townField = document.getElementById('town');
-	var townValue = townField.value;
-
+	var townValue = $('#town').val();
 	if (!regAddr.test(townValue)){
-		invalidFileds[invalidFileds.length] = townField;
+		invalidFileds[invalidFileds.length] = $('#town');
 		messages[messages.length] = "Enter valid town";
 	}else{
 		customerInfo["town"] = townValue;
@@ -79,22 +73,18 @@ function validate(customerInfo){
 	/*Validate org area
 	  Not 'select' (i.e some option is chosen)
 	 */
-	var areaField = document.getElementById('area');
-	var areaValue = areaField.value;
-
+	var areaValue = $('#area').val();
 	if (areaValue == 'select'){
-		invalidFileds[invalidFileds.length] = areaField;
+		invalidFileds[invalidFileds.length] = $('#area');
 		messages[messages.length] = "Choose any one area";
 	}else{
 		customerInfo["area"] = areaValue;
 	}
 
 	/*Validate org phone*/
-	var orgPhoneField = document.getElementById('orgPhone');
-	var orgPhoneValue = orgPhoneField.value;
-
+	var orgPhoneValue = $('#orgPhone').val();
 	if (!regPhone.test(orgPhoneValue)){
-		invalidFileds[invalidFileds.length] = orgPhoneField;
+		invalidFileds[invalidFileds.length] = $('#orgPhone');
 		messages[messages.length] = "Enter valid phone number for organisation";
 	}else{
 		customerInfo["orgPhone"] = orgPhoneValue;
@@ -103,10 +93,9 @@ function validate(customerInfo){
 	/*Validate prime name
 	  same validation as org name
 	 */
-	var primeNameFiled = document.getElementById('primeContactName');
-	var primeNameValue = primeNameFiled.value;
+	var primeNameValue = $('#primeContactName').val();
 	if (!regName.test(primeNameValue)){
-		invalidFileds[invalidFileds.length] = primeNameFiled;
+		invalidFileds[invalidFileds.length] = $('#primeContactName');
 		messages[messages.length] = "Enter valid name for primery contact";
 	}else{
 		customerInfo["primeContactName"] = primeNameValue;
@@ -115,12 +104,10 @@ function validate(customerInfo){
 	/*Validate primery contact phone
 	  Same validations as org phone
 	 */
-	var primePhoneField = document.getElementById('primeContactPhone');
-	var primePhoneValue = primePhoneField.value;
-
+	var primePhoneValue = $('#primeContactPhone').val();
 	var regPhone = /^[+\d][\d-]{5,15}$/;
 	if (!regPhone.test(primePhoneValue)){
-		invalidFileds[invalidFileds.length] = primePhoneField;
+		invalidFileds[invalidFileds.length] = $('#primeContactPhone');
 		messages[messages.length] = "Enter valid phone number for primery contact";
 	}else{
 		customerInfo["primeContactPhone"] = primePhoneValue;
@@ -132,6 +119,7 @@ function validate(customerInfo){
 	else{
 		for(i=0; i< messages.length; i++)
 			alert(messages[i]);
+		enableFormEdit();
 		return false;
 	}
 }
@@ -151,14 +139,33 @@ function submit(customerInfo){
 function postSuccess (serverReturnData){
 	//alert("Submit returned success");
 
+	var customerInfo = serverReturnData["customerInfo"];
+	var newDiv = $(document.createElement('div'));
+
 	if ("user added" === serverReturnData["state"] ){
-		alert("User added successfully");
+		newDiv.attr("Title", "User added");
+		var content = "User " + customerInfo["orgName"] + " added successfully";
+		$(newDiv).html(content);
+		$(newDiv).dialog({
+			modal: true,
+			resizable: false,
+			position: ["center center"],
+			width: 'auto',
+			buttons: {
+				"Add another user": function() {
+					$(this).dialog("close");
+					$('#customerInfo')[0].reset();
+					enableFormEdit();
+				},
+				"Cancel": function() {
+					$(this).dialog("close");
+				}
+			}
+		});
 	}
 	else if ("existing user" === serverReturnData["state"] ){
-		var customerInfo = serverReturnData["customerInfo"];
 		var customerToRetry = {};
-		var newDiv = $(document.createElement('div'));
-		newDiv.attr("Title", "Existing users with the same name.");
+		newDiv.attr("Title", "Existing users with the same name");
 
 		var content = "<table border=1>";
 		content += "<tr> <td> S.No </td> <td> Name </td> <td> Address1 </td> <td> Address2 </td> <td> Town </td> <td> Area </td> <td> Phone </td>";
@@ -202,9 +209,10 @@ function postSuccess (serverReturnData){
 			buttons: {
 				"Add user STILL": function() {
 					$(this).dialog("close");
-					reSubmit(customerToRetry);
+					submit(customerToRetry);
 				},
 				"Edit User": function() {
+					enableFormEdit();
 					$(this).dialog("close");
 				}
 			}
@@ -223,4 +231,14 @@ function reSubmit(customerInfo){
 			postSuccess(serverReturnData);
 		}
 	});
+}
+
+function disableForm(){
+	$("input").prop('disabled', true);
+	$("select").prop('disabled', true);
+}
+
+function enableFormEdit(){
+	$("input").prop('disabled', false);
+	$("select").prop('disabled', false);
 }
