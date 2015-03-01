@@ -145,14 +145,8 @@ function getCustomerList (req, res, serverData){
 			console.log("Error while querying all customers data");
 		}
 		else{
-			var customerListDup = [];
-			for (i=0; i<results.length; i++){
-				var dummyObj = {};
-				dummyObj["customer"] = results[0];
-				customerListDup.push(dummyObj);
-			}
-			serverData["customerList"] = customerListDup;
-			console.log(JSON.stringify(customerListDup));
+			serverData["customerList"] = results;
+			console.log(JSON.stringify(results));
 		}
 		renderPage(req, res, serverData);
 	});

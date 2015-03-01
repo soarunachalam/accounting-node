@@ -82,8 +82,7 @@
 				$("#bill").handsontable({
 					data : availableCustomers,
 					startCols: 8,
-					colHeaders: ['Organisation Name', 'Address1', 'Address2', 'Town', 'Area', 'Phone', 'Primary contact', 'Primary phone'],
-					minSpareRows: 1
+					colHeaders: ['Organisation Name', 'Address1', 'Address2', 'Town', 'Area', 'Phone', 'Primary contact', 'Primary phone']
 				});
 			}
 		</script>
