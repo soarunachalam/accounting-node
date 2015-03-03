@@ -9,15 +9,15 @@
 
 		<link href="http://code.jquery.com/ui/1.11.3/themes/smoothness/jquery-ui.css" rel="stylesheet">
 		<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
-		<script src="http://code.jquery.com/ui/1.11.3/jquery-ui.js"></script>		
+		<script src="http://code.jquery.com/ui/1.11.3/jquery-ui.js"></script>
 		<script src="handsontable.com/dist/handsontable.full.js"></script>
 		<link rel="stylesheet" media="screen" href="handsontable.com/dist/handsontable.full.css">
 		<link rel="stylesheet" media="screen" href="handsontable.com/demo/css/samples.css">
-		
+
 
 		<link href="customerlist.css" rel="stylesheet">
 		<script src="customerlist-helper.js"></script>
-		
+
 		<div class="ui-widget" id="queryFields" name="queryFields">
 			<label for="areaSel"> Town: </label> <select id="townSel" name="townSel">
 				{#towns}
@@ -28,30 +28,51 @@
 			<label for="areaSel"> Area: </label> <select id="areaSel" name="areaSel">
 				{#areas}
 					<option>{area}</option>{~n}
-				{/areas}
+				{/areas}custInfoTable
 			</select>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<input type="button" id="filterBtn" onclick="filter()" value="Apply Filter"></input>
+
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<label for="orgNameSel">Organisation Name: </label>
 			<input id="orgNameSel"> </input>
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<button onclick="filter()">Apply Filter</button>
+
 		</div>
 		</br></br>
-		<div class="handsontable" id="bill"></div>
+
+		<div class="custTable" id="custTable">
+			Customer information
+			&nbsp;&nbsp;&nbsp;&nbsp
+
+			<input type="button" id="editToggle" onclick="toggleEditButton()" value="Enable Edit"> </input>
+			&nbsp;&nbsp;
+			<input type="button" id="editSubmit" onClick="listEditSubmit()" value="Submit"> </input>
+			</br></br>
+
+			<div class="handsontable" id="bill">
+			</div>
+		</div>
 
 		<script>
+			$("#orgNameSel")[0].onkeyup = function() {orgNameFilter()};
+
 			$(document).ready(function () {
 				bindOrgNameAutoComplete();
 				bindCustomerList();
+				$("#editSubmit").hide();
 			});
 
 			function bindOrgNameAutoComplete(){
+				console.log("in bindOrgNameAutoComplete");
+			}
+
+			function bindOrgNameAutoComplete1(){
 				var availableOrgNames = [];
-				
-				{#orgNames}					
-					availableOrgNames.push("{orgName}");					
+
+				{#orgNames}
+					availableOrgNames.push("{orgName}");
 				{/orgNames};
-				
+
 				$( "#orgNameSel" ).autocomplete({
 				  source: availableOrgNames,
 					minLength: 0,
@@ -60,12 +81,12 @@
 					$(this).autocomplete("search", "")
 					});
 			}
-			
+
 			function bindCustomerList(){
 				var availableCustomers = [];
 				{#customerList}
-					console.log("{#.}{orgName}{/.}");
 					var dummyObj = {};
+					dummyObj['id'] = "{#.}{id}{/.}";
 					dummyObj['orgName'] = "{#.}{orgName}{/.}";
 					dummyObj['addr1'] = "{#.}{addr1}{/.}";
 					dummyObj['addr2'] = "{#.}{addr2}{/.}";
@@ -76,16 +97,56 @@
 					dummyObj['primeContactPhone'] = "{#.}{primeContactPhone}{/.}";
 					availableCustomers.push(dummyObj);
 				{/customerList}
-				
-				console.log(JSON.stringify(availableCustomers));
-				
+				gloBalCustomerList = availableCustomers;
+
 				$("#bill").handsontable({
 					data : availableCustomers,
+					rowHeaders: true,
 					startCols: 8,
-					colHeaders: ['Organisation Name', 'Address1', 'Address2', 'Town', 'Area', 'Phone', 'Primary contact', 'Primary phone']
+					colHeaders: ['Organisation Name', 'Address1', 'Address2', 'Town', 'Area', 'Phone', 'Primary contact', 'Primary phone'],
+					columnSorting: true,
+					colWidths: [180,150,150,90,90,140,150,140],
+					wordWrap: true,
+					afterChange: accumulateChanges,
+					columns: [
+							{
+								data: 'orgName',
+								readOnly: true
+							},
+							{
+								data: 'addr1',
+								readOnly: true
+							},
+							{
+								data: 'addr2',
+								readOnly: true
+							},
+							{
+								data: 'town',
+								readOnly: true
+							},
+							{
+								data: 'area',
+								readOnly: true
+							},
+							{
+								data: 'orgPhone',
+								readOnly: true
+							},
+							{
+								data: 'primeContactName',
+								readOnly: true
+							},
+							{
+								data: 'primeContactPhone',
+								readOnly: true
+							}
+						]
 				});
+				HT = $("#bill").handsontable('getInstance');
 			}
+
 		</script>
 	</BODY>
-	
+
 </HTML>

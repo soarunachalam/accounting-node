@@ -4,13 +4,18 @@ body {
 
 #queryFields {
 	border: 2px solid #a1a1a1;
-	padding: 20px 40px; 
+	padding: 20px 40px;
 	width: 1100px;
 }
-#bill {
+
+#custTable {
 	border: 2px solid #a1a1a1;
-	padding: 10px 20px; 
+	padding: 10px 20px;
 	height: 300px;
-	width: 1100px;
+	width: 1150px;
 	overflow: scroll;
+}
+
+#customHeader1{
+	font-size: 20px;
 }

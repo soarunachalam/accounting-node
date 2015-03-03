@@ -7,6 +7,7 @@ Userinfo page
 	On tab validate
 	Use CSS instead of '&nbsp;'
 	Use CSS to highlight error fields
+	Instead of alert use a dialog
 	Area field
 		send options from server (using dust)		
 	Town filed
