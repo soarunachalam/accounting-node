@@ -16,9 +16,10 @@
 
 
 		<link href="customerlist.css" rel="stylesheet">
+		<script src="globals.js"> </script>
 		<script src="customerlist-helper.js"></script>
 
-		<div class="ui-widget" id="queryFields" name="queryFields">
+		<div class="ui-widget" id="queryFields" name="queryFields" >
 			<label for="areaSel"> Town: </label> <select id="townSel" name="townSel">
 				{#towns}
 					<option>{town}</option>{~n}
@@ -28,14 +29,15 @@
 			<label for="areaSel"> Area: </label> <select id="areaSel" name="areaSel">
 				{#areas}
 					<option>{area}</option>{~n}
-				{/areas}custInfoTable
+				{/areas}
 			</select>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<input type="button" id="filterBtn" onclick="filter()" value="Apply Filter"></input>
 
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<label for="orgNameSel">Organisation Name: </label>
-			<input id="orgNameSel"> </input>
+			<span style="position: absolute;" class="btnSearch ui-state-default" title="search"><span class="ui-icon ui-icon-search"></span></span>
+			<input id="orgNameSel" placeholder="Search"> </input>
 
 		</div>
 		</br></br>
@@ -57,33 +59,21 @@
 			$("#orgNameSel")[0].onkeyup = function() {orgNameFilter()};
 
 			$(document).ready(function () {
-				bindOrgNameAutoComplete();
 				bindCustomerList();
-				$("#editSubmit").hide();
+				bindAreaList();
 			});
 
-			function bindOrgNameAutoComplete(){
-				console.log("in bindOrgNameAutoComplete");
-			}
-
-			function bindOrgNameAutoComplete1(){
-				var availableOrgNames = [];
-
-				{#orgNames}
-					availableOrgNames.push("{orgName}");
-				{/orgNames};
-
-				$( "#orgNameSel" ).autocomplete({
-				  source: availableOrgNames,
-					minLength: 0,
-					scroll: true
-				}).focus(function() {
-					$(this).autocomplete("search", "")
-					});
+			function bindAreaList(){
+				console.log("in bindAreaList");
+				{#areas}
+					var dummy = "{#.}{area}{/.}";
+					if('select' != dummy)
+						globalAreaList.push(dummy);
+				{/areas}
+				console.log(JSON.stringify(globalAreaList));
 			}
 
 			function bindCustomerList(){
-				var availableCustomers = [];
 				{#customerList}
 					var dummyObj = {};
 					dummyObj['id'] = "{#.}{id}{/.}";
@@ -95,12 +85,12 @@
 					dummyObj['orgPhone'] = "{#.}{orgPhone}{/.}";
 					dummyObj['primeContactName'] = "{#.}{primeContactName}{/.}";
 					dummyObj['primeContactPhone'] = "{#.}{primeContactPhone}{/.}";
-					availableCustomers.push(dummyObj);
+					globalCustomerList.push(dummyObj);
 				{/customerList}
-				gloBalCustomerList = availableCustomers;
+				const serverCustomerList = JSON.stringify(globalCustomerList);
 
 				$("#bill").handsontable({
-					data : availableCustomers,
+					data : globalCustomerList,
 					rowHeaders: true,
 					startCols: 8,
 					colHeaders: ['Organisation Name', 'Address1', 'Address2', 'Town', 'Area', 'Phone', 'Primary contact', 'Primary phone'],
@@ -108,40 +98,7 @@
 					colWidths: [180,150,150,90,90,140,150,140],
 					wordWrap: true,
 					afterChange: accumulateChanges,
-					columns: [
-							{
-								data: 'orgName',
-								readOnly: true
-							},
-							{
-								data: 'addr1',
-								readOnly: true
-							},
-							{
-								data: 'addr2',
-								readOnly: true
-							},
-							{
-								data: 'town',
-								readOnly: true
-							},
-							{
-								data: 'area',
-								readOnly: true
-							},
-							{
-								data: 'orgPhone',
-								readOnly: true
-							},
-							{
-								data: 'primeContactName',
-								readOnly: true
-							},
-							{
-								data: 'primeContactPhone',
-								readOnly: true
-							}
-						]
+					columns: tableCols
 				});
 				HT = $("#bill").handsontable('getInstance');
 			}

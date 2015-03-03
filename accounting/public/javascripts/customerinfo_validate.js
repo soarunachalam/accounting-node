@@ -11,26 +11,8 @@ function validate(customerInfo){
 	var invalidFileds = [];
 	var messages = [];
 
-	/*Validate org name
-	  Alpha numeric, spaces, .,-,_,',\,(comma)
-	  Length 2 to 128
-	*/
-	var regName = /^[^\s\\`~!@#$%^&*\(\)_'=+\{\}"\/?.,<>\|][^\\~!@#$%^&*\(\)=+\{\}"\/?<>\|]{2,128}$/;
-
-	/*Validate org address line 1
-	  Length 1 to 256
-	*/
-	var regAddr = /^[^\s\\`~!$%^&'=+"\/?.,<>\|][^\\\/]{1,256}$/;
-
-	/*Validate org phone
-	  Numeric, +, -
-	  Both + and - will be removed
-	  Length compulsory 10 numbers
-	 */
-	var regPhone = /^[+\d][\d-]{5,15}$/;
-
 	var orgNameValue = $('#orgName').val();
-	if (!regName.test(orgNameValue)){
+	if (!NAMEREGEX.test(orgNameValue)){
 		invalidFileds[invalidFileds.length] = $('#orgName');
 		messages[messages.length] = "Enter valid name for organisation";
 	}else{
@@ -38,9 +20,9 @@ function validate(customerInfo){
 	}
 
 	/*Validate org address line 1*/
-	
+
 	var addr1Value = $('#addr1').val();
-	if (!regAddr.test(addr1Value)){
+	if (!ADDRREGEX.test(addr1Value)){
 		invalidFileds[invalidFileds.length] = $('#addr1');
 		messages[messages.length] = "Enter valid address1";
 	}else{
@@ -51,7 +33,7 @@ function validate(customerInfo){
 	  Same validations as addr1
 	 */
 	var addr2Value = $('#addr2').val();
-	if (addr2Value.length != 0 && !regAddr.test(addr2Value)){
+	if (addr2Value.length != 0 && !ADDRREGEX.test(addr2Value)){
 		invalidFileds[invalidFileds.length] = $('#addr2');
 		messages[messages.length] = "Enter valid address2";
 	}else{
@@ -63,7 +45,7 @@ function validate(customerInfo){
 	  Same validations as addr1
 	 */
 	var townValue = $('#town').val();
-	if (!regAddr.test(townValue)){
+	if (!ADDRREGEX.test(townValue)){
 		invalidFileds[invalidFileds.length] = $('#town');
 		messages[messages.length] = "Enter valid town";
 	}else{
@@ -83,7 +65,7 @@ function validate(customerInfo){
 
 	/*Validate org phone*/
 	var orgPhoneValue = $('#orgPhone').val();
-	if (!regPhone.test(orgPhoneValue)){
+	if (!PHONEREGEX.test(orgPhoneValue)){
 		invalidFileds[invalidFileds.length] = $('#orgPhone');
 		messages[messages.length] = "Enter valid phone number for organisation";
 	}else{
@@ -94,7 +76,7 @@ function validate(customerInfo){
 	  same validation as org name
 	 */
 	var primeNameValue = $('#primeContactName').val();
-	if (!regName.test(primeNameValue)){
+	if (!NAMEREGEX.test(primeNameValue)){
 		invalidFileds[invalidFileds.length] = $('#primeContactName');
 		messages[messages.length] = "Enter valid name for primery contact";
 	}else{
@@ -105,8 +87,7 @@ function validate(customerInfo){
 	  Same validations as org phone
 	 */
 	var primePhoneValue = $('#primeContactPhone').val();
-	var regPhone = /^[+\d][\d-]{5,15}$/;
-	if (!regPhone.test(primePhoneValue)){
+	if (!PHONEREGEX.test(primePhoneValue)){
 		invalidFileds[invalidFileds.length] = $('#primeContactPhone');
 		messages[messages.length] = "Enter valid phone number for primery contact";
 	}else{

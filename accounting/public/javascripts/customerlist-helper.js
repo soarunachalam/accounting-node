@@ -1,9 +1,64 @@
 editedIds = [];
+HT = {};
+globalCustomerList = [];
+globalAreaList = [];
+
+tableCols = [
+				{
+					data: 'orgName',
+					validator: NAMEREGEX,
+					allowInvalid: false,
+					readOnly: true
+				},
+				{
+					data: 'addr1',
+					validator: ADDRREGEX,
+					allowInvalid: false,
+					readOnly: true
+				},
+				{
+					data: 'addr2',
+					validator: ADDRREGEX,
+					allowInvalid: false,
+					readOnly: true
+				},
+				{
+					data: 'town',
+					validator: ADDRREGEX,
+					allowInvalid: false,
+					readOnly: true
+				},
+				{
+					data: 'area',
+					type: 'dropdown',
+					source: globalAreaList,
+					allowInvalid: false,
+					readOnly: true
+				},
+				{
+					data: 'orgPhone',
+					validator: PHONEREGEX,
+					allowInvalid: false,
+					readOnly: true
+				},
+				{
+					data: 'primeContactName',
+					validator: NAMEREGEX,
+					allowInvalid: false,
+					readOnly: true
+				},
+				{
+					data: 'primeContactPhone',
+					validator: PHONEREGEX,
+					allowInvalid: false,
+					readOnly: true
+				}
+			];
 
 function filter(){
 	var town = $("#townSel")[0].value;
 	var area = $("#areaSel")[0].value;
-	var data = gloBalCustomerList;
+	var data = globalCustomerList;
 	var searchResult = [];
 	var iterator=0;
 
@@ -33,90 +88,27 @@ function filter(){
 }
 
 function toggleEditButton(){
+	var itr=0;
 	if ("Enable Edit" === ($("#editToggle")[0].value)){
-		//Remove read only
-		$("#editToggle")[0].value = "Disable Edit"
-		var editableColumns = [
-			{
-				data: 'orgName',
-				readOnly: false
-			},
-			{
-				data: 'addr1',
-				readOnly: false
-			},
-			{
-				data: 'addr2',
-				readOnly: false
-			},
-			{
-				data: 'town',
-				readOnly: false
-			},
-			{
-				data: 'area',
-				readOnly: false
-			},
-			{
-				data: 'orgPhone',
-				readOnly: false
-			},
-			{
-				data: 'primeContactName',
-				readOnly: false
-			},
-			{
-				data: 'primeContactPhone',
-				readOnly: false
-			}
-		];
-		HT.updateSettings({columns: editableColumns});
-		$("#editSubmit").show();
+		//Set edit enable
+		$("#editToggle")[0].value = "Disable Edit";
+		for (itr=0; itr<tableCols.length; itr++){
+			tableCols[itr]['readOnly'] = false;
+		}
+		HT.updateSettings({columns: tableCols});
 	}else{
 		//Set to read only
 		$("#editToggle")[0].value = "Enable Edit";
-		var readOnlyColumns = [
-			{
-				data: 'orgName',
-				readOnly: true
-			},
-			{
-				data: 'addr1',
-				readOnly: true
-			},
-			{
-				data: 'addr2',
-				readOnly: true
-			},
-			{
-				data: 'town',
-				readOnly: true
-			},
-			{
-				data: 'area',
-				readOnly: true
-			},
-			{
-				data: 'orgPhone',
-				readOnly: true
-			},
-			{
-				data: 'primeContactName',
-				readOnly: true
-			},
-			{
-				data: 'primeContactPhone',
-				readOnly: true
-			}
-		];
-		HT.updateSettings({columns: readOnlyColumns});
-		$("#editSubmit").hide();
+		for (itr=0; itr<tableCols.length; itr++){
+			tableCols[itr]['readOnly'] = true;
+		}
+		HT.updateSettings({columns: tableCols});
 	}
 }
 
 function orgNameFilter() {
 	var val = $("#orgNameSel")[0].value.toLowerCase();
-	var data = gloBalCustomerList;
+	var data = globalCustomerList;
 	var iterator=0;
 	var searchResult = [];
 
@@ -132,7 +124,11 @@ function orgNameFilter() {
 }
 
 function listEditSubmit(){
-	alert("in listEditSubmit");
+	console.log("in listEditSubmit");
+
+	if(0 === editedIds.length){
+		alert("No changes to submit");
+	}
 	console.log(JSON.stringify(editedIds));
 }
 
@@ -143,8 +139,10 @@ function accumulateChanges(changes, source){
 		if(changes){
 			for(i=0; i<changes.length; i++){
 				var modiefiedCustomer = HT.getSourceDataAtRow(changes[i][0]);
-				console.log(modiefiedCustomer);
-				editedIds.push(modiefiedCustomer['id']);
+				var id = modiefiedCustomer['id'];
+				if (-1 === editedIds.indexOf(id)){
+					editedIds.push(id);
+				}
 			}
 		}
 	}
