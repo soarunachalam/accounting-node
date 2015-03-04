@@ -17,7 +17,7 @@
 
 		<link href="customerlist.css" rel="stylesheet">
 		<script src="globals.js"> </script>
-		<script src="customerlist-helper.js"></script>
+		<script src="customerlist_helper.js"></script>
 
 		<div class="ui-widget" id="queryFields" name="queryFields" >
 			<label for="areaSel"> Town: </label> <select id="townSel" name="townSel">

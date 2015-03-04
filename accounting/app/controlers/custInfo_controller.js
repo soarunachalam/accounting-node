@@ -47,6 +47,7 @@ module.exports = {
 					return res.status(200).send(serverReturnData);
 				}
 				else {
+					console.log("No existing customer with organisation name %s", customerInfo["orgName"]);
 					createDBEntry (req, res, customerInfo);
 				}
 			});
@@ -54,18 +55,19 @@ module.exports = {
 	},
 
 	getCustomerList : function (req, res, next) {
-		console.log("In get customer list");
+		console.log("In getCustomerList");
 
 		var serverData = {};		
 		getTowns(req, res, serverData);
 	},
 
 	updateCustomerList : function (req, res, next) {
-		console.log("In get customer list");
+		console.log("In updateCustomerList");
 	}
 };
 
 function createDBEntry (req, res, customerInfo){
+	console.log("in createDBEntry");
 	var serverReturnData = {};
 	var err, results;
 	req.models.customerinfo.create(customerInfo, function(err, results) {

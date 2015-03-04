@@ -6,25 +6,25 @@ globalAreaList = [];
 tableCols = [
 				{
 					data: 'orgName',
-					validator: NAMEREGEX,
+					validator: NAME_REGEX,
 					allowInvalid: false,
 					readOnly: true
 				},
 				{
 					data: 'addr1',
-					validator: ADDRREGEX,
+					validator: ADDR_REGEX,
 					allowInvalid: false,
 					readOnly: true
 				},
 				{
 					data: 'addr2',
-					validator: ADDRREGEX,
+					validator: ADDR_REGEX,
 					allowInvalid: false,
 					readOnly: true
 				},
 				{
 					data: 'town',
-					validator: ADDRREGEX,
+					validator: ADDR_REGEX,
 					allowInvalid: false,
 					readOnly: true
 				},
@@ -37,19 +37,19 @@ tableCols = [
 				},
 				{
 					data: 'orgPhone',
-					validator: PHONEREGEX,
+					validator: PHONE_REGEX,
 					allowInvalid: false,
 					readOnly: true
 				},
 				{
 					data: 'primeContactName',
-					validator: NAMEREGEX,
+					validator: NAME_REGEX,
 					allowInvalid: false,
 					readOnly: true
 				},
 				{
 					data: 'primeContactPhone',
-					validator: PHONEREGEX,
+					validator: PHONE_REGEX,
 					allowInvalid: false,
 					readOnly: true
 				}

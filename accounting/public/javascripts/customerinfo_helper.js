@@ -12,7 +12,7 @@ function validate(customerInfo){
 	var messages = [];
 
 	var orgNameValue = $('#orgName').val();
-	if (!NAMEREGEX.test(orgNameValue)){
+	if (!NAME_REGEX.test(orgNameValue)){
 		invalidFileds[invalidFileds.length] = $('#orgName');
 		messages[messages.length] = "Enter valid name for organisation";
 	}else{
@@ -22,7 +22,7 @@ function validate(customerInfo){
 	/*Validate org address line 1*/
 
 	var addr1Value = $('#addr1').val();
-	if (!ADDRREGEX.test(addr1Value)){
+	if (!ADDR_REGEX.test(addr1Value)){
 		invalidFileds[invalidFileds.length] = $('#addr1');
 		messages[messages.length] = "Enter valid address1";
 	}else{
@@ -33,7 +33,7 @@ function validate(customerInfo){
 	  Same validations as addr1
 	 */
 	var addr2Value = $('#addr2').val();
-	if (addr2Value.length != 0 && !ADDRREGEX.test(addr2Value)){
+	if (addr2Value.length != 0 && !ADDR_REGEX.test(addr2Value)){
 		invalidFileds[invalidFileds.length] = $('#addr2');
 		messages[messages.length] = "Enter valid address2";
 	}else{
@@ -45,7 +45,7 @@ function validate(customerInfo){
 	  Same validations as addr1
 	 */
 	var townValue = $('#town').val();
-	if (!ADDRREGEX.test(townValue)){
+	if (!ADDR_REGEX.test(townValue)){
 		invalidFileds[invalidFileds.length] = $('#town');
 		messages[messages.length] = "Enter valid town";
 	}else{
@@ -65,7 +65,7 @@ function validate(customerInfo){
 
 	/*Validate org phone*/
 	var orgPhoneValue = $('#orgPhone').val();
-	if (!PHONEREGEX.test(orgPhoneValue)){
+	if (!PHONE_REGEX.test(orgPhoneValue)){
 		invalidFileds[invalidFileds.length] = $('#orgPhone');
 		messages[messages.length] = "Enter valid phone number for organisation";
 	}else{
@@ -76,7 +76,7 @@ function validate(customerInfo){
 	  same validation as org name
 	 */
 	var primeNameValue = $('#primeContactName').val();
-	if (!NAMEREGEX.test(primeNameValue)){
+	if (!NAME_REGEX.test(primeNameValue)){
 		invalidFileds[invalidFileds.length] = $('#primeContactName');
 		messages[messages.length] = "Enter valid name for primery contact";
 	}else{
@@ -87,7 +87,7 @@ function validate(customerInfo){
 	  Same validations as org phone
 	 */
 	var primePhoneValue = $('#primeContactPhone').val();
-	if (!PHONEREGEX.test(primePhoneValue)){
+	if (!PHONE_REGEX.test(primePhoneValue)){
 		invalidFileds[invalidFileds.length] = $('#primeContactPhone');
 		messages[messages.length] = "Enter valid phone number for primery contact";
 	}else{
@@ -148,9 +148,7 @@ function postSuccess (serverReturnData){
 		var customerToRetry = {};
 		newDiv.attr("Title", "Existing users with the same name");
 
-		var content = "<table border=1>";
-		content += "<tr> <td> S.No </td> <td> Name </td> <td> Address1 </td> <td> Address2 </td> <td> Town </td> <td> Area </td> <td> Phone </td>";
-		content += "<td> Primery contact </td> + <td> Primery phone </td> </tr>";
+		var content = TABLE_HEADER_HTML;
 
 		for (i=0; i<customerInfo.length; i++){
 			if (customerInfo[i]["state"] === "Not Added"){
@@ -179,7 +177,7 @@ function postSuccess (serverReturnData){
 				content += "</td> </tr>";
 			}
 		}
-		content += "</table>";
+		content += TABLE_CLOSER_HTML;
 
 		$(newDiv).html(content);
 		$(newDiv).dialog({
@@ -198,11 +196,16 @@ function postSuccess (serverReturnData){
 				}
 			}
 		});
+		
+		$(newDiv).bind('dialogclose', function(event) {
+			enableFormEdit();
+		});
 	}
 	else{
 		alert("Invalid status from server");
 	}
 }
+
 function reSubmit(customerInfo){
 	$.ajax({
 		type: "POST",
